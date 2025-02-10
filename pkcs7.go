@@ -17,7 +17,6 @@ import (
 	"fmt"
 	"math/big"
 	"sort"
-	"time"
 
 	_ "crypto/sha1" // for crypto.SHA1
 )
@@ -301,8 +300,8 @@ func getHashForOID(oid asn1.ObjectIdentifier) (crypto.Hash, error) {
 	switch {
 	case oid.Equal(oidDigestAlgorithmSHA1):
 		return crypto.SHA1, nil
-  case oid.Equal(oidSHA256):
-    return crypto.SHA256, nil
+	case oid.Equal(oidSHA256):
+		return crypto.SHA256, nil
 	}
 	return crypto.Hash(0), ErrUnsupportedAlgorithm
 }
@@ -634,7 +633,6 @@ func (sd *SignedData) AddSigner(cert *x509.Certificate, pkey crypto.PrivateKey, 
 	attrs := &attributes{}
 	attrs.Add(oidAttributeContentType, sd.sd.ContentInfo.ContentType)
 	attrs.Add(oidAttributeMessageDigest, sd.messageDigest)
-	attrs.Add(oidAttributeSigningTime, time.Now())
 	for _, attr := range config.ExtraSignedAttributes {
 		attrs.Add(attr.Type, attr.Value)
 	}
@@ -883,7 +881,7 @@ func encryptDESCBC(content []byte) ([]byte, *encryptedContentInfo, error) {
 // value is EncryptionAlgorithmDESCBC. To use a different algorithm, change the
 // value before calling Encrypt(). For example:
 //
-//     ContentEncryptionAlgorithm = EncryptionAlgorithmAES128GCM
+//	ContentEncryptionAlgorithm = EncryptionAlgorithmAES128GCM
 //
 // TODO(fullsailor): Add support for encrypting content with other algorithms
 func Encrypt(content []byte, recipients []*x509.Certificate) ([]byte, error) {
